@@ -1,0 +1,6 @@
+h_experiment
+first_flourine_experiment
+last_flourine_experiment
+
+timecourse_stride
+number_of_peaks_to_fit

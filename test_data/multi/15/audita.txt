@@ -1,0 +1,18 @@
+##TITLE= Audit trail, TopSpin 3.5 pl 5
+##JCAMPDX= 5.01
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= jc
+$$ /opt/topspin3.5pl2/data/jc/nmr/joel_19F_trmf_rnc_fl_68TAG_150125/15/audita.txt
+##AUDIT TRAIL=  $$ (NUMBER, WHEN, WHO, WHERE, PROCESS, VERSION, WHAT)
+(   1,<2025-01-16 08:02:09.030 +0000>,<jc>,<CZC516016K>,<go4>,<TopSpin 3.5.5>,
+      <created by zg
+	started at 2025-01-16 06:57:32.612 +0000,
+	POWCHK enabled, PULCHK disabled,
+       configuration hash MD5:
+       06 BB 94 E2 03 ED 15 18 83 4C 92 67 9C 58 FC 4B
+       data hash MD5: 65K
+       A1 FD B9 E5 2B 0A 52 5F 11 5B D7 DD FB 3A CA DA>)
+##END=
+
+$$ hash MD5
+$$ 49 5A F7 9D 5D 88 B8 F8 B9 96 14 F2 F7 08 5E B7

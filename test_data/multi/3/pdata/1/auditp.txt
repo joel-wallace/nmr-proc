@@ -1,0 +1,45 @@
+##TITLE= Audit trail, TopSpin 3.5 pl 5
+##JCAMPDX= 5.01
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= jc
+$$ /opt/topspin3.5pl2/data/jc/nmr/joel_19F_trmf_rnc_fl_68TAG_150125/3/pdata/1/auditp.txt
+##AUDIT TRAIL=  $$ (NUMBER, WHEN, WHO, WHERE, PROCESS, VERSION, WHAT)
+(   1,<2025-01-15 19:06:50.507 +0000>,<jc>,<CZC516016K>,<go4>,<TopSpin 3.5.5>,
+      <created by zg
+	started at 2025-01-15 18:02:07.728 +0000,
+	POWCHK enabled, PULCHK disabled,
+       configuration hash MD5:
+       06 BB 94 E2 03 ED 15 18 83 4C 92 67 9C 58 FC 4B
+       data hash MD5: 65K
+       DF 98 84 40 42 38 1B 6D 2E 71 66 45 7C 76 CE 86>)
+(   2,<2025-01-15 20:03:50.028 +0000>,<jc>,<CZC516016K>,<proc1d>,<TopSpin 3.5.5>,
+      <Start of raw data processing
+       efp LB = 10 FT_mod = 6 PKNL = 1 PHC0 = 25.3775 PHC1 = 0 SI = 64K 
+       data hash MD5: 64K
+       02 DF 70 36 FB 8B A9 CF 9C 94 AB 9F F7 EC C5 02>)
+$$ /home/joelw/nmr/proc19f-python/test_data/multi/3/pdata/1/auditp.txt
+(   3,<2025-05-28T14:34:58.590+0100>,<joelw>,<gigha>,<proc1d>,<TopSpin 4.4.1>,
+      <Start of raw data processing
+       efp LB = 10 FT_mod = 6 PKNL = 1 PHC0 = 25.3775 PHC1 = 0 SI = 64K
+       fid data hash MD5: 65K
+       DF 98 84 40 42 38 1B 6D 2E 71 66 45 7C 76 CE 86
+       data hash MD5: 64K
+       C9 A3 61 36 F8 32 E5 F6 EF 11 D1 51 E4 CD 7D 45>)
+(   4,<2025-05-28T14:38:16.630+0100>,<joelw>,<gigha>,<proc1d>,<TopSpin 4.4.1>,
+      <Start of raw data processing
+       efp LB = 10 FT_mod = 6 PKNL = 1 PHC0 = 25.3775 PHC1 = 0 SI = 64K
+       fid data hash MD5: 65K
+       DF 98 84 40 42 38 1B 6D 2E 71 66 45 7C 76 CE 86
+       data hash MD5: 64K
+       C9 A3 61 36 F8 32 E5 F6 EF 11 D1 51 E4 CD 7D 45>)
+(   5,<2025-05-28T14:57:15.642+0100>,<joelw>,<gigha>,<proc1d>,<TopSpin 4.4.1>,
+      <Start of raw data processing
+       efp LB = 10 FT_mod = 6 PKNL = 1 PHC0 = 25.3775 PHC1 = 0 SI = 64K
+       fid data hash MD5: 65K
+       DF 98 84 40 42 38 1B 6D 2E 71 66 45 7C 76 CE 86
+       data hash MD5: 64K
+       C9 A3 61 36 F8 32 E5 F6 EF 11 D1 51 E4 CD 7D 45>)
+##END=
+
+$$ hash MD5
+$$ A1 C6 EF CC 02 C2 96 CB 4F C1 D2 59 FF 59 86 95
