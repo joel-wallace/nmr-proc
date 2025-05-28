@@ -6,8 +6,10 @@ This guide is for contributors working on the codebase. It covers structure, con
 
 ```
 project-root/
-├── src/          # Main Python source files
-├── tests/        # Unit tests
+├── src/
+│   ├── app.py
+│   └── gui/
+│       └── main_window.py
 ├── requirements.txt
 └── DEVELOPERS.md
 ```
