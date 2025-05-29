@@ -10,8 +10,7 @@ def process_1h_spectrum(base_path: str, experiment_number: str, p0=0, offset=0.0
     data = ng.proc_base.fft(data)
     data = ng.proc_base.ps(data, p0=p0)
     data = ng.proc_base.di(data)
-    from nmrglue import proc_bl
-    # data = proc_bl.baseline(data, meth='polynomial', order=3)
+    # data = ng.proc_bl.baseline_corrector(data)
     data = ng.proc_base.rev(data)
 
     udic = ng.bruker.guess_udic(dic, data)
@@ -19,3 +18,6 @@ def process_1h_spectrum(base_path: str, experiment_number: str, p0=0, offset=0.0
     ppm_scale = uc.ppm_scale() - offset
 
     return ppm_scale, data
+
+def baseline_1h_spectrum(data):
+    return ng.proc_bl.baseline_corrector(data)

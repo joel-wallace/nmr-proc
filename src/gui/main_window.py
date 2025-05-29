@@ -65,19 +65,29 @@ class MainWindow(QMainWindow):
             layout.addWidget(le)
             return le
 
-        self.h_experiment_edit = add_labeled_lineedit(left_lower_layout, "H Exp")
-
-        self.process_1h_button = QPushButton("Process 1H")
+        h_experiment_layout = QHBoxLayout()
+        h_experiment_label = QLabel("1H Exp:")
+        self.h_experiment_edit = QLineEdit()
+        h_experiment_layout.addWidget(h_experiment_label)
+        h_experiment_layout.addWidget(self.h_experiment_edit)
+        self.process_1h_button = QPushButton("Process")
         self.process_1h_button.clicked.connect(self.handle_process_1h)
-        left_lower_layout.addWidget(self.process_1h_button)
+        h_experiment_layout.addWidget(self.process_1h_button)
+
+        left_lower_layout.addLayout(h_experiment_layout)
 
         self.p0_slider = QSlider(Qt.Horizontal)
         self.p0_slider.setRange(-90, 90)
         self.p0_slider.setValue(0)
         self.p0_slider.valueChanged.connect(self.update_spectrum_from_slider)
         self.p0_label = QLabel("p0: 0")
-        left_lower_layout.addWidget(self.p0_label)
-        left_lower_layout.addWidget(self.p0_slider)
+        self.baseline_1h_button = QPushButton("Baseline")
+        self.baseline_1h_button.clicked.connect(self.baseline_1h)
+        p0_layout = QHBoxLayout()
+        p0_layout.addWidget(self.p0_label)
+        p0_layout.addWidget(self.p0_slider)
+        p0_layout.addWidget(self.baseline_1h_button)
+        left_lower_layout.addLayout(p0_layout)
 
         self.offset_slider = QSlider(Qt.Horizontal)
         self.offset_slider.setRange(-300, 300)
@@ -85,15 +95,19 @@ class MainWindow(QMainWindow):
         self.offset_slider.valueChanged.connect(self.update_offset)
         self.offset_slider.sliderPressed.connect(self.update_offset)
         self.offset_slider.sliderReleased.connect(self.finish_offset)
-        self.offset_label = QLabel("Offset: 0.00 ppm")
-        left_lower_layout.addWidget(self.offset_label)
-        left_lower_layout.addWidget(self.offset_slider)
+        self.offset_label = QLabel("Offset:\n0.00 ppm")
+        offset_layout = QHBoxLayout()
+        offset_layout.addWidget(self.offset_label)
+        offset_layout.addWidget(self.offset_slider)
+        left_lower_layout.addLayout(offset_layout)
+
+        
 
         left_lower_panel.setLayout(left_lower_layout)
 
         # Right panel
         self.plot_widget = pg.PlotWidget()
-        self.green_line = pg.InfiniteLine(pos=100.0, angle=90, pen=pg.mkPen('g', width=2))
+        self.green_line = pg.InfiniteLine(pos=1000.0, angle=90, pen=pg.mkPen('g', width=2))
         self.plot_widget.addItem(self.green_line)
 
         menubar = QMenuBar()
@@ -142,13 +156,20 @@ class MainWindow(QMainWindow):
             self.path_label.setText(shorten_path(directory))
 
     def plot_placeholder_data(self):
-        x = np.linspace(-200, 200, 1000)
-        y = np.exp(-0.01 * x ** 2) * np.cos(0.2 * x)
-        self.plot_widget.plot(x, y, pen='b')
-        self.plot_widget.setLabel('left', 'Intensity')
-        self.plot_widget.setLabel('bottom', 'Chemical Shift (ppm)')
-        self.plot_widget.setTitle("Placeholder Spectrum")
-        self.plot_widget.getPlotItem().invertX(True)
+        import numpy as np
+        import pyqtgraph as pg
+
+        x = np.linspace(0, 4 * np.pi, 1000)
+        y = np.sin(x)
+
+        self.plot_widget.clear()
+        self.plot_widget.plot(x, y, pen=pg.mkPen('orange', width=2))
+        self.plot_widget.setLabel('left', 'Amplitude')
+        self.plot_widget.setLabel('bottom', 'Time')
+        self.plot_widget.setTitle("Sine Wave")
+        self.plot_widget.getPlotItem().invertX(False)
+
+
 
     def handle_process_1h(self):
         from processing.file import process_1h_spectrum
@@ -178,23 +199,29 @@ class MainWindow(QMainWindow):
 
         self.update_plot(ppm, data)
 
+    def baseline_1h(self):
+        from processing.file import baseline_1h_spectrum
+        self.data = baseline_1h_spectrum(self.data)
+        self.update_plot(self.ppm, self.data)
+
     def update_spectrum_from_slider(self):
         self.p0_label.setText(f"p0: {self.p0_slider.value()}")
         self.handle_process_1h()
 
     def update_offset(self):
-        self.offset_label.setText(f"Offset: {self.offset_slider.value()/1000.0:.3f} ppm")
+        self.offset_label.setText(f"Offset:\n{self.offset_slider.value()/1000.0:.3f} ppm")
         self.handle_process_1h()
         self.plot_widget.setXRange(-0.5, 0.5)
         self.green_line.setPos(0.0)
 
     def finish_offset(self):
         self.plot_widget.setXRange(-1, 12)
-        self.green_line.setPos(100)
+        self.green_line.setPos(1000)
+        self.baseline_1h()
 
     def update_plot(self, ppm, data):
         self.plot_widget.clear()
-        self.plot_widget.plot(ppm, data, pen='b')
+        self.plot_widget.plot(ppm, data, pen='w')
         self.plot_widget.setLabel('left', 'Intensity')
         self.plot_widget.setLabel('bottom', 'Chemical Shift (ppm)')
         self.plot_widget.setTitle("1H NMR Spectrum")
