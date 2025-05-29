@@ -65,7 +65,8 @@ def baseline_19f_spectrum(ppm_scale, summed_data):
 
     return ppm_axis, corrected_data
 
-def fit_lorentzian_curves(ppm_axis, corrected_data, num_peaks=1):
+def fit_lorentzian_curves(ppm_axis, corrected_data, ppm_guesses):
+    num_peaks = len(ppm_guesses)
     from scipy.optimize import curve_fit
     import numpy as np
     def lorentzian(x, A, x0, gamma):
@@ -81,8 +82,8 @@ def fit_lorentzian_curves(ppm_axis, corrected_data, num_peaks=1):
     p0 = []
     for i in range(num_peaks):
         A_guess = max(corrected_data)      # Height
-        x0_guess = ppm_axis[np.argmax(corrected_data)]     # Position
-        gamma_guess = 0.2  # Typical value, or tuned
+        x0_guess = ppm_guesses[i]    # Position
+        gamma_guess = 0.2  # Typical value
         p0.extend([A_guess, x0_guess, gamma_guess])
 
     # Perform curve fitting

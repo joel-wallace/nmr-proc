@@ -117,18 +117,46 @@ class MainWindow(QMainWindow):
 
         self.baseline_19f_button = QPushButton("Baseline")
         self.baseline_19f_button.clicked.connect(self.baseline_19f)
-        num_peaks_label = QLabel("Num. peaks")
-        self.num_peaks_edit = QLineEdit()
+        # num_peaks_label = QLabel("Num. peaks")
         self.fit_peaks_button = QPushButton("Fit")
         self.fit_peaks_button.clicked.connect(self.fit_peaks_19f)
         basic_19f_layout = QHBoxLayout()
         basic_19f_layout.addWidget(self.baseline_19f_button)
-        basic_19f_layout.addWidget(num_peaks_label)
-        basic_19f_layout.addWidget(self.num_peaks_edit)
+        # basic_19f_layout.addWidget(num_peaks_label)
+        # basic_19f_layout.addWidget(self.num_peaks_edit)
         basic_19f_layout.addWidget(self.fit_peaks_button)
         f_tab_layout.addLayout(basic_19f_layout)
 
+        f_tab_layout.addWidget(QLabel("Peak initial guesses:"))
 
+        self.peak_guess_edits = [QLineEdit("-61.7"),QLineEdit("0"),QLineEdit("0"),QLineEdit("0")]
+
+        peak_1_guess_label = QLabel("1:")
+        peak_1_guess_layout = QHBoxLayout()
+        peak_1_guess_layout.addWidget(peak_1_guess_label)
+        peak_1_guess_layout.addWidget(self.peak_guess_edits[0])
+
+        peak_2_guess_label = QLabel("2:")
+        peak_2_guess_layout = QHBoxLayout()
+        peak_2_guess_layout.addWidget(peak_2_guess_label)
+        peak_2_guess_layout.addWidget(self.peak_guess_edits[1])
+
+        peak_3_guess_label = QLabel("3:")
+        peak_3_guess_layout = QHBoxLayout()
+        peak_3_guess_layout.addWidget(peak_3_guess_label)
+        peak_3_guess_layout.addWidget(self.peak_guess_edits[2])
+
+        peak_4_guess_label = QLabel("4:")
+        peak_4_guess_layout = QHBoxLayout()
+        peak_4_guess_layout.addWidget(peak_4_guess_label)
+        peak_4_guess_layout.addWidget(self.peak_guess_edits[3])
+
+        peak_guess_layout = QHBoxLayout()
+        peak_guess_layout.addLayout(peak_1_guess_layout)
+        peak_guess_layout.addLayout(peak_2_guess_layout)
+        peak_guess_layout.addLayout(peak_3_guess_layout)
+        peak_guess_layout.addLayout(peak_4_guess_layout)
+        f_tab_layout.addLayout(peak_guess_layout)
 
         h_proc_tab = QWidget()
         h_proc_tab.setLayout(h_tab_layout)
@@ -286,8 +314,13 @@ class MainWindow(QMainWindow):
     def fit_peaks_19f(self):
         self.update_plot(self.ppm, self.data, "19F")
         from processing.file import fit_lorentzian_curves
-        num_peaks = int(self.num_peaks_edit.text().strip())
-        curves = fit_lorentzian_curves(self.ppm,self.data,num_peaks)
+        # num_peaks = int(self.num_peaks_edit.text().strip())
+        peak_guesses = []
+        for guess in self.peak_guess_edits:
+            value = float(guess.text().strip())
+            if value != 0:
+                peak_guesses.append(value)
+        curves = fit_lorentzian_curves(self.ppm,self.data,peak_guesses)
         colours = ["blue", "orange", "green", "yellow", "red"]
         for i, curve in enumerate(curves):
             fit_ppm, fit_data = curve
