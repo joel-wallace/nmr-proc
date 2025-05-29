@@ -57,14 +57,6 @@ class MainWindow(QMainWindow):
         left_lower_panel = QWidget()
         left_lower_layout = QVBoxLayout()
 
-        def add_labeled_lineedit(layout, label_text):
-            lbl = QLabel(label_text)
-            le = QLineEdit()
-            le.setMaximumWidth(100)
-            layout.addWidget(lbl)
-            layout.addWidget(le)
-            return le
-
         h_experiment_layout = QHBoxLayout()
         h_experiment_label = QLabel("1H Exp:")
         self.h_experiment_edit = QLineEdit()
@@ -99,9 +91,13 @@ class MainWindow(QMainWindow):
         offset_layout = QHBoxLayout()
         offset_layout.addWidget(self.offset_label)
         offset_layout.addWidget(self.offset_slider)
+        self.save_offset_button = QPushButton("Save")
+        self.save_offset_button.clicked.connect(self.save_offset)
+        offset_layout.addWidget(self.save_offset_button)
         left_lower_layout.addLayout(offset_layout)
 
-        
+        self.h_offset = 0
+        self.f_offset = 0
 
         left_lower_panel.setLayout(left_lower_layout)
 
@@ -154,6 +150,10 @@ class MainWindow(QMainWindow):
             self.model.setRootPath(directory)
             self.tree.setRootIndex(self.model.index(directory))
             self.path_label.setText(shorten_path(directory))
+
+    def save_offset(self):
+        self.h_offset = self.offset_slider.value() / 1000.0
+        self.f_offset = self.h_offset * 0.94
 
     def plot_placeholder_data(self):
         import numpy as np
