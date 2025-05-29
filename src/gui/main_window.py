@@ -107,7 +107,7 @@ class MainWindow(QMainWindow):
         f_experiment_to_label = QLabel("to")
         self.f_experiment_2_edit = QLineEdit()
         self.process_19f_button = QPushButton("Plot")
-        # self.process_19f_button.clicked.connect(self.handle_process_19f)
+        self.process_19f_button.clicked.connect(self.handle_process_19f)
         f_experiment_layout.addWidget(f_experiment_label)
         f_experiment_layout.addWidget(self.f_experiment_1_edit)
         f_experiment_layout.addWidget(f_experiment_to_label)
@@ -220,6 +220,27 @@ class MainWindow(QMainWindow):
         self.current_offset = offset
 
         self.update_plot(ppm, data)
+
+    def handle_process_19f(self):
+        from processing.file import process_sum_19f_spectra
+
+        directory = self.model.filePath(self.tree.rootIndex())
+        exp1 = self.f_experiment_1_edit.text().strip()
+        exp2 = self.f_experiment_2_edit.text().strip()
+        if not (exp1.isdigit() and exp2.isdigit()):
+            print("Invalid experiment number")
+            return
+        offset = self.f_offset
+
+        try:
+            ppm, data = process_sum_19f_spectra(directory, exp1, exp2, offset)
+        except Exception as e:
+            print("Processing failed:", e)
+            return
+        
+        self.ppm = ppm
+        self.data = data
+        self.update_plot(ppm,data)
 
     def baseline_1h(self):
         from processing.file import baseline_1h_spectrum
