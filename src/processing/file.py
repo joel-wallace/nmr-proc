@@ -81,7 +81,10 @@ def fit_lorentzian_curves(ppm_axis, corrected_data, ppm_guesses):
 
     p0 = []
     for i in range(num_peaks):
-        A_guess = max(corrected_data)      # Height
+        if i < 2:
+            A_guess = max(corrected_data)
+        else:
+            A_guess = max(corrected_data)/10    # Height
         x0_guess = ppm_guesses[i]    # Position
         gamma_guess = 0.2  # Typical value
         p0.extend([A_guess, x0_guess, gamma_guess])

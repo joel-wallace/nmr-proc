@@ -131,22 +131,22 @@ class MainWindow(QMainWindow):
 
         self.peak_guess_edits = [QLineEdit("-61.7"),QLineEdit("0"),QLineEdit("0"),QLineEdit("0")]
 
-        peak_1_guess_label = QLabel("1:")
+        peak_1_guess_label = QLabel("N:")
         peak_1_guess_layout = QHBoxLayout()
         peak_1_guess_layout.addWidget(peak_1_guess_label)
         peak_1_guess_layout.addWidget(self.peak_guess_edits[0])
 
-        peak_2_guess_label = QLabel("2:")
+        peak_2_guess_label = QLabel("U:")
         peak_2_guess_layout = QHBoxLayout()
         peak_2_guess_layout.addWidget(peak_2_guess_label)
         peak_2_guess_layout.addWidget(self.peak_guess_edits[1])
 
-        peak_3_guess_label = QLabel("3:")
+        peak_3_guess_label = QLabel("I1:")
         peak_3_guess_layout = QHBoxLayout()
         peak_3_guess_layout.addWidget(peak_3_guess_label)
         peak_3_guess_layout.addWidget(self.peak_guess_edits[2])
 
-        peak_4_guess_label = QLabel("4:")
+        peak_4_guess_label = QLabel("I2:")
         peak_4_guess_layout = QHBoxLayout()
         peak_4_guess_layout.addWidget(peak_4_guess_label)
         peak_4_guess_layout.addWidget(self.peak_guess_edits[3])
