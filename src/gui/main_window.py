@@ -114,6 +114,15 @@ class MainWindow(QMainWindow):
         f_experiment_layout.addWidget(self.f_experiment_2_edit)
         f_experiment_layout.addWidget(self.process_19f_button)
         f_tab_layout.addLayout(f_experiment_layout)
+
+        self.baseline_19f_button = QPushButton("Baseline")
+        self.baseline_19f_button.clicked.connect(self.baseline_19f)
+        basic_19f_layout = QHBoxLayout()
+        basic_19f_layout.addWidget(self.baseline_19f_button)
+        f_tab_layout.addLayout(basic_19f_layout)
+
+
+
         h_proc_tab = QWidget()
         h_proc_tab.setLayout(h_tab_layout)
 
@@ -219,7 +228,7 @@ class MainWindow(QMainWindow):
         self.data = data
         self.current_offset = offset
 
-        self.update_plot(ppm, data)
+        self.update_plot(ppm, data, "1H")
 
     def handle_process_19f(self):
         from processing.file import process_sum_19f_spectra
@@ -240,12 +249,17 @@ class MainWindow(QMainWindow):
         
         self.ppm = ppm
         self.data = data
-        self.update_plot(ppm,data)
+        self.update_plot(ppm,data,"19F")
 
     def baseline_1h(self):
         from processing.file import baseline_1h_spectrum
         self.data = baseline_1h_spectrum(self.data)
-        self.update_plot(self.ppm, self.data)
+        self.update_plot(self.ppm, self.data,"1H")
+
+    def baseline_19f(self):
+        from processing.file import baseline_19f_spectrum
+        self.ppm, self.data = baseline_19f_spectrum(self.ppm, self.data)
+        self.update_plot(self.ppm, self.data,"19F")
 
     def update_spectrum_from_slider(self):
         self.p0_label.setText(f"p0: {self.p0_slider.value()}")
@@ -262,16 +276,25 @@ class MainWindow(QMainWindow):
         self.green_line.setPos(1000)
         self.baseline_1h()
 
-    def update_plot(self, ppm, data):
+    def update_plot(self, ppm, data, nucleus):
         self.plot_widget.clear()
         self.plot_widget.plot(ppm, data, pen='w')
         self.plot_widget.setLabel('left', 'Intensity')
         self.plot_widget.setLabel('bottom', 'Chemical Shift (ppm)')
-        self.plot_widget.setTitle("1H NMR Spectrum")
-        self.plot_widget.getPlotItem().invertX(True)
-        self.plot_widget.addItem(self.green_line)
-
         y_min, y_max = min(data), max(data)
-        zoom_factor = 5
-        self.plot_widget.setYRange(y_min / zoom_factor, y_max / zoom_factor)
-        self.plot_widget.setXRange(-1, 12)
+        if nucleus == "1H":
+            self.plot_widget.setTitle("1H NMR Spectrum")
+            self.plot_widget.addItem(self.green_line)
+            self.plot_widget.setXRange(-1, 12)
+            zoom_factor = 5
+            self.plot_widget.setYRange(y_min / zoom_factor, y_max / zoom_factor)
+        elif nucleus == "19F":
+            self.plot_widget.setTitle("19F NMR Spectrum")
+            self.plot_widget.setXRange(-58, -65)
+            zoom_factor = 5
+            self.plot_widget.setYRange(y_min, y_max)
+        self.plot_widget.getPlotItem().invertX(True)
+        
+        
+        
+        

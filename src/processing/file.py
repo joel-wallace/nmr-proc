@@ -38,3 +38,29 @@ def process_sum_19f_spectra(base_path: str, exp1: str, exp2: str, offset=0.0):
             ppm_scale = uc.ppm_scale() - offset
 
     return ppm_scale, summed_data
+
+def baseline_19f_spectrum(ppm_scale, summed_data):
+    import numpy as np
+
+    # Baseline
+    ppm_axis = ppm_scale[31000:35000]
+    data_axis = summed_data[31000:35000]
+
+    # Identify points outside the -60 to -65 ppm range for fitting
+    mask = (ppm_axis < -60) & (ppm_axis > -65)  # Mask for exclusion
+
+    # Baseline selection (only using points outside the exclusion zone)
+    ppm_baseline = ppm_axis[~mask]
+    data_baseline = data_axis[~mask]
+
+    # Fit a polynomial (degree 3)
+    degree = 4
+    coeffs = np.polyfit(ppm_baseline, data_baseline, degree)
+
+    # Evaluate baseline fit
+    baseline_fit = np.polyval(coeffs, ppm_axis)
+
+    # Apply baseline correction
+    corrected_data = data_axis - baseline_fit
+
+    return ppm_axis, corrected_data
