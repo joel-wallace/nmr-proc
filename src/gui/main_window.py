@@ -57,13 +57,14 @@ class MainWindow(QMainWindow):
         # Left lower panel
         left_lower_panel = QTabWidget()
         h_tab_layout = QVBoxLayout()
+        f_tab_layout = QVBoxLayout()
 
         h_experiment_layout = QHBoxLayout()
         h_experiment_label = QLabel("1H Exp:")
         self.h_experiment_edit = QLineEdit()
         h_experiment_layout.addWidget(h_experiment_label)
         h_experiment_layout.addWidget(self.h_experiment_edit)
-        self.process_1h_button = QPushButton("Process")
+        self.process_1h_button = QPushButton("Plot")
         self.process_1h_button.clicked.connect(self.handle_process_1h)
         h_experiment_layout.addWidget(self.process_1h_button)
 
@@ -100,9 +101,27 @@ class MainWindow(QMainWindow):
         self.h_offset = 0
         self.f_offset = 0
 
+        f_experiment_layout = QHBoxLayout()
+        f_experiment_label = QLabel("19F exps:")
+        self.f_experiment_1_edit = QLineEdit()
+        f_experiment_to_label = QLabel("to")
+        self.f_experiment_2_edit = QLineEdit()
+        self.process_19f_button = QPushButton("Plot")
+        # self.process_19f_button.clicked.connect(self.handle_process_19f)
+        f_experiment_layout.addWidget(f_experiment_label)
+        f_experiment_layout.addWidget(self.f_experiment_1_edit)
+        f_experiment_layout.addWidget(f_experiment_to_label)
+        f_experiment_layout.addWidget(self.f_experiment_2_edit)
+        f_experiment_layout.addWidget(self.process_19f_button)
+        f_tab_layout.addLayout(f_experiment_layout)
         h_proc_tab = QWidget()
         h_proc_tab.setLayout(h_tab_layout)
+
+        f_proc_tab = QWidget()
+        f_proc_tab.setLayout(f_tab_layout)
+
         left_lower_panel.addTab(h_proc_tab, "1H")
+        left_lower_panel.addTab(f_proc_tab, "19F")
 
         # Right panel
         self.plot_widget = pg.PlotWidget()
