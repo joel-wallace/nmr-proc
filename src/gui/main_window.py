@@ -117,8 +117,15 @@ class MainWindow(QMainWindow):
 
         self.baseline_19f_button = QPushButton("Baseline")
         self.baseline_19f_button.clicked.connect(self.baseline_19f)
+        num_peaks_label = QLabel("Num. peaks")
+        self.num_peaks_edit = QLineEdit()
+        self.fit_peaks_button = QPushButton("Fit")
+        self.fit_peaks_button.clicked.connect(self.fit_peaks_19f)
         basic_19f_layout = QHBoxLayout()
         basic_19f_layout.addWidget(self.baseline_19f_button)
+        basic_19f_layout.addWidget(num_peaks_label)
+        basic_19f_layout.addWidget(self.num_peaks_edit)
+        basic_19f_layout.addWidget(self.fit_peaks_button)
         f_tab_layout.addLayout(basic_19f_layout)
 
 
@@ -275,6 +282,11 @@ class MainWindow(QMainWindow):
         self.plot_widget.setXRange(-1, 12)
         self.green_line.setPos(1000)
         self.baseline_1h()
+    
+    def fit_peaks_19f(self, num_peaks):
+        from processing.file import fit_lorentzian_curves
+        fit_ppm, fit_data = fit_lorentzian_curves(self.ppm,self.data)
+        self.plot_widget.plot(fit_ppm, fit_data, pen=pg.mkPen('orange', width=2.5))
 
     def update_plot(self, ppm, data, nucleus):
         self.plot_widget.clear()
