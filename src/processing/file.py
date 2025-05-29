@@ -71,18 +71,29 @@ def fit_lorentzian_curves(ppm_axis, corrected_data, num_peaks=1):
     def lorentzian(x, A, x0, gamma):
         return A * (gamma**2 / ((x - x0)**2 + gamma**2))
 
-    # Estimate initial parameters (A, x0, gamma)
-    A_guess = max(corrected_data)  # Peak height
-    x0_guess = ppm_axis[np.argmax(corrected_data)]  # Peak position
-    gamma_guess = 0.2  # Approximate width, adjust as needed
+    def lorentzians(x, *params):
+        y = np.zeros_like(x)
+        for i in range(0, len(params), 3):
+            A, x0, gamma = params[i:i+3]
+            y += lorentzian(x, A, x0, gamma)
+        return y
 
-    p0 = [A_guess, x0_guess, gamma_guess]
+    p0 = []
+    for i in range(num_peaks):
+        A_guess = max(corrected_data)      # Height
+        x0_guess = ppm_axis[np.argmax(corrected_data)]     # Position
+        gamma_guess = 0.2  # Typical value, or tuned
+        p0.extend([A_guess, x0_guess, gamma_guess])
 
     # Perform curve fitting
-    popt, _ = curve_fit(lorentzian, ppm_axis, corrected_data, p0=p0)
+    popt, _ = curve_fit(lorentzians, ppm_axis, corrected_data, p0=p0)
+    print(popt)
 
+    lorentzian_curves = []
+    for i in range(0, num_peaks*3, 3):
+        lorentzian_curves.append((ppm_axis, lorentzian(ppm_axis, popt[i], popt[i+1], popt[i+2])))
     # Extract fitted parameters
-    A_fit, x0_fit, gamma_fit = popt
-    lorentzian_fit = lorentzian(ppm_axis, A_fit, x0_fit, gamma_fit)
-
-    return ppm_axis, lorentzian_fit
+    # A_fit, x0_fit, gamma_fit = popt
+    # lorentzian_fit = lorentzian(ppm_axis, A_fit, x0_fit, gamma_fit)
+    print(len(lorentzian_curves))
+    return lorentzian_curves

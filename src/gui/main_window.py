@@ -283,10 +283,15 @@ class MainWindow(QMainWindow):
         self.green_line.setPos(1000)
         self.baseline_1h()
     
-    def fit_peaks_19f(self, num_peaks):
+    def fit_peaks_19f(self):
+        self.update_plot(self.ppm, self.data, "19F")
         from processing.file import fit_lorentzian_curves
-        fit_ppm, fit_data = fit_lorentzian_curves(self.ppm,self.data)
-        self.plot_widget.plot(fit_ppm, fit_data, pen=pg.mkPen('orange', width=2.5))
+        num_peaks = int(self.num_peaks_edit.text().strip())
+        curves = fit_lorentzian_curves(self.ppm,self.data,num_peaks)
+        colours = ["blue", "orange", "green", "yellow", "red"]
+        for i, curve in enumerate(curves):
+            fit_ppm, fit_data = curve
+            self.plot_widget.plot(fit_ppm, fit_data, pen=pg.mkPen(colours[i], width=2.5))
 
     def update_plot(self, ppm, data, nucleus):
         self.plot_widget.clear()
