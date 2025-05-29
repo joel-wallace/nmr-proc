@@ -2,7 +2,8 @@
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QTreeView, QSplitter,
     QFileDialog, QPushButton, QFileSystemModel, QLabel,
-    QMenuBar, QMenu, QSlider, QHBoxLayout, QLineEdit
+    QMenuBar, QMenu, QSlider, QHBoxLayout, QLineEdit,
+    QTabWidget
 )
 from PySide6.QtGui import QAction
 from PySide6.QtCore import Qt, QDir
@@ -54,8 +55,8 @@ class MainWindow(QMainWindow):
         left_upper_panel.setLayout(left_upper_layout)
 
         # Left lower panel
-        left_lower_panel = QWidget()
-        left_lower_layout = QVBoxLayout()
+        left_lower_panel = QTabWidget()
+        h_tab_layout = QVBoxLayout()
 
         h_experiment_layout = QHBoxLayout()
         h_experiment_label = QLabel("1H Exp:")
@@ -66,7 +67,7 @@ class MainWindow(QMainWindow):
         self.process_1h_button.clicked.connect(self.handle_process_1h)
         h_experiment_layout.addWidget(self.process_1h_button)
 
-        left_lower_layout.addLayout(h_experiment_layout)
+        h_tab_layout.addLayout(h_experiment_layout)
 
         self.p0_slider = QSlider(Qt.Horizontal)
         self.p0_slider.setRange(-90, 90)
@@ -79,7 +80,7 @@ class MainWindow(QMainWindow):
         p0_layout.addWidget(self.p0_label)
         p0_layout.addWidget(self.p0_slider)
         p0_layout.addWidget(self.baseline_1h_button)
-        left_lower_layout.addLayout(p0_layout)
+        h_tab_layout.addLayout(p0_layout)
 
         self.offset_slider = QSlider(Qt.Horizontal)
         self.offset_slider.setRange(-300, 300)
@@ -94,12 +95,14 @@ class MainWindow(QMainWindow):
         self.save_offset_button = QPushButton("Save")
         self.save_offset_button.clicked.connect(self.save_offset)
         offset_layout.addWidget(self.save_offset_button)
-        left_lower_layout.addLayout(offset_layout)
+        h_tab_layout.addLayout(offset_layout)
 
         self.h_offset = 0
         self.f_offset = 0
 
-        left_lower_panel.setLayout(left_lower_layout)
+        h_proc_tab = QWidget()
+        h_proc_tab.setLayout(h_tab_layout)
+        left_lower_panel.addTab(h_proc_tab, "1H")
 
         # Right panel
         self.plot_widget = pg.PlotWidget()
