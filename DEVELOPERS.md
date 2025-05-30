@@ -2,35 +2,13 @@
 
 This guide is for contributors working on the codebase. It covers structure, conventions, and collaboration practices.
 
-## 📁 Project Structure
+## Missing features (in order of priority):
+- Lorentzian initial guess point and click
+- Change 19F line broadening
+- Bootstrapping
+- Calculate integrals
+- Export nice image
 
-```
-project-root/
-├── src/
-│   ├── app.py
-│   └── gui/
-│       └── main_window.py
-├── requirements.txt
-└── DEVELOPERS.md
-```
-
-## 🔁 Git & Branching
-
-- Use `feature/`, `bugfix/`, or `refactor/` prefixes:
-  ```
-  git checkout -b feature/short-description
-  ```
-- Open pull requests against `main`.
-- Write clear, focused commit messages.
-
-## 🧹 Code Style
-
-- Follow [PEP8](https://peps.python.org/pep-0008/)
-- Use tools like `black` and `ruff`:
-  ```
-  black src/ tests/
-  ruff .
-  ```
 
 ## 🧑‍💻 Contact
 

@@ -1,12 +1,6 @@
 ### nmr-proc
 # 19F NMR Processing
 
-## Missing features:
-- Change 19F line broadening
-- Bootstrapping
-- Calculate integrals
-- Export nice image
-
 ## Installation:
 Open a terminal in the parent directory where you want to install:
 ```bash
