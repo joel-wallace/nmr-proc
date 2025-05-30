@@ -1,12 +1,13 @@
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QSplitter,
-    QVBoxLayout,
+    QVBoxLayout, QTabWidget
         )
 from PySide6.QtCore import Qt, QDir
 
 import pyqtgraph as pg
 
 from gui.file_panel import FilePanel
+from gui.proton_panel import ProtonPanel
 from state import AppState
 
 class MainWindow(QMainWindow):
@@ -25,13 +26,18 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(main_widget)
         main_splitter = QSplitter(Qt.Horizontal)
         left_main_panel = QSplitter(Qt.Vertical)
-        self.plot_widget = pg.PlotWidget()
+        self.plot_widget = pg.PlotWidget(background="w")
 
         # Create file_tree and add to left_main_panel
         self.file_panel = FilePanel(self.app_state)
         left_main_panel.addWidget(self.file_panel)
+
+        control_panel = QTabWidget()
+        self.proton_panel = ProtonPanel(self.app_state)
+        control_panel.addTab(self.proton_panel, "1H")
+        left_main_panel.addWidget(control_panel)
         # Create tab panel and add to left_main_panel
-        left_main_panel.setSizes([40,60])
+        left_main_panel.setSizes([5000,5000])
 
         main_splitter.addWidget(left_main_panel)
         main_splitter.addWidget(self.plot_widget)
