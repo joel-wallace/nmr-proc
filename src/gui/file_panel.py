@@ -16,3 +16,5 @@ class FilePanel(QWidget):
         self.tree.hideColumn(1)
         self.tree.hideColumn(2)
         self.tree.hideColumn(3)
+
+        ## Need getters and setters for dir path etc
