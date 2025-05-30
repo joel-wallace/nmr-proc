@@ -115,6 +115,12 @@ class MainWindow(QMainWindow):
         f_experiment_layout.addWidget(self.process_19f_button)
         f_tab_layout.addLayout(f_experiment_layout)
 
+        sample_conc_layout = QHBoxLayout()
+        sample_conc_layout.addWidget(QLabel("Sample conc. (uM)"))
+        self.sample_conc_edit = QLineEdit()
+        sample_conc_layout.addWidget(self.sample_conc_edit)
+        f_tab_layout.addLayout(sample_conc_layout)
+
         self.baseline_19f_button = QPushButton("Baseline")
         self.baseline_19f_button.clicked.connect(self.baseline_19f)
         # num_peaks_label = QLabel("Num. peaks")

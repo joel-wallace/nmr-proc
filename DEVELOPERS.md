@@ -3,6 +3,7 @@
 This guide is for contributors working on the codebase. It covers structure, conventions, and collaboration practices.
 
 ## Missing features (in order of priority):
+- Normalise to uM concentration * NS
 - Lorentzian initial guess point and click
 - Change 19F line broadening
 - Bootstrapping

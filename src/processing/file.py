@@ -25,9 +25,14 @@ def baseline_1h_spectrum(data):
 def process_sum_19f_spectra(base_path: str, exp1: str, exp2: str, offset=0.0):
     summed_data = None
     ppm_scale = None
+    total_scans = 0
     for exp in range(int(exp1), int(exp2) + 1):
         dic, data = ng.bruker.read_pdata(base_path + "/" + str(exp) + "/pdata/1")
-
+        # Get NS: ##$NS= 1024
+        with open(base_path + "/" + str(exp) + "/acqus") as file:
+            for line in file:
+                if line.startswith("##$NS="):
+                    total_scans += int(line.strip().split('=')[1])
         if summed_data is None:
             summed_data = data
         else: summed_data += data
@@ -37,7 +42,7 @@ def process_sum_19f_spectra(base_path: str, exp1: str, exp2: str, offset=0.0):
             uc = ng.fileiobase.uc_from_udic(udic)
             ppm_scale = uc.ppm_scale() - offset
 
-    return ppm_scale, summed_data
+    return ppm_scale, summed_data, total_scans
 
 def baseline_19f_spectrum(ppm_scale, summed_data):
     import numpy as np
