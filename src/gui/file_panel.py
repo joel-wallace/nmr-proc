@@ -46,7 +46,7 @@ class FilePanel(QWidget):
             entries = map_nmr_directory(directory)
 
             for entry in entries:
-                self.app_state.experiments.append(Experiment(
+                self.app_state.add_experiment(Experiment(
                     number=int(entry["name"]),
                     nucleus=entry["type"],
                     path=os.path.join(directory, entry["name"])
@@ -56,16 +56,16 @@ class FilePanel(QWidget):
 
     def populate_experiment_list(self):
         self.list_widget.clear()
-        font = QFont("Inter", 10)
+        # font = QFont("Inter", 10)
     
         for exp in sorted(self.app_state.experiments, key=lambda e: e.number):
             nucleus = exp.nucleus or "Unprocessed"
             item = QListWidgetItem(f"{exp.number:<4} ({nucleus})")
-            item.setFont(font)
+            # item.setFont(font)
     
             color = {
                 "1H": "#0059FF",
-                "19F": "#01d436",
+                "19F": "#05af30",
                 None: "#FF0000"
             }.get(exp.nucleus, "#FF0000")
     
