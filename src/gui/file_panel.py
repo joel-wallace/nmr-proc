@@ -12,10 +12,12 @@ import os
 import re
 
 from input.bruker import map_nmr_directory
+from state import Experiment
 
 class FilePanel(QWidget):
-    def __init__(self):
+    def __init__(self, app_state):
         super().__init__()
+        self.app_state = app_state
 
         self.open_button = QPushButton("Select Directory")
         self.open_button.clicked.connect(self.select_directory)
@@ -38,31 +40,34 @@ class FilePanel(QWidget):
         directory = QFileDialog.getExistingDirectory(self, "Select Directory")
         if directory:
             self.path_edit.setText(directory)
-            self.populate_experiment_list(directory)
+            self.app_state.selected_directory = directory
 
-    def populate_experiment_list(self, directory):
+            self.app_state.experiments.clear()
+            entries = map_nmr_directory(directory)
+
+            for entry in entries:
+                self.app_state.experiments.append(Experiment(
+                    number=int(entry["name"]),
+                    nucleus=entry["type"],
+                    path=os.path.join(directory, entry["name"])
+                ))
+
+            self.populate_experiment_list()
+
+    def populate_experiment_list(self):
         self.list_widget.clear()
-
         font = QFont("Inter", 10)
-
-        entries = sorted(
-            map_nmr_directory(directory),
-            key=lambda entry: int(entry["name"])
-        )
-
-        for entry in entries:
-            name = entry["name"]
-            exp_type = entry["type"] or "Unprocessed"
-
-            item = QListWidgetItem(f"{name:<4} ({exp_type})")
+    
+        for exp in sorted(self.app_state.experiments, key=lambda e: e.number):
+            nucleus = exp.nucleus or "Unprocessed"
+            item = QListWidgetItem(f"{exp.number:<4} ({nucleus})")
             item.setFont(font)
-
-            # Optional: color-code by type
-            if exp_type == "1H":
-                item.setForeground(QBrush(QColor("#0059FF")))  # Blue
-            elif exp_type == "19F":
-                item.setForeground(QBrush(QColor("#01d436")))  # Green
-            else:
-                item.setForeground(QBrush(QColor("#FF0000")))  # Red
-
+    
+            color = {
+                "1H": "#0059FF",
+                "19F": "#01d436",
+                None: "#FF0000"
+            }.get(exp.nucleus, "#FF0000")
+    
+            item.setForeground(QBrush(QColor(color)))
             self.list_widget.addItem(item)
