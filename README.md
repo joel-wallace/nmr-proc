@@ -15,5 +15,5 @@ Open a terminal in the `nmr-proc` directory:
 python src/app.py # alternatively replace python with python3
 ```
 
-👩‍💻 For development details, see [DEVELOPERS.md](./DEVELOPERS.md)
+
 
